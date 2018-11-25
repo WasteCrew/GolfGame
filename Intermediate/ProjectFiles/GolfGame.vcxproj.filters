@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\GolfGame.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{E0F333E6-B312-4620-B438-8A79239263D4}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\GolfGame.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\GolfGameEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <Filter Include="Config">
+      <UniqueIdentifier>{26E17333-654A-4B1F-87C4-A79C22074444}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\GolfGame">
+      <UniqueIdentifier>{A164521D-F8FF-4121-A7F1-9EBEA34E2CE7}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\GolfGame\GolfGame.Build.cs">
+      <Filter>Source\GolfGame</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\GolfGame\GolfGame.cpp">
+      <Filter>Source\GolfGame</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\GolfGame\GolfGame.h">
+      <Filter>Source\GolfGame</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\GolfGame\GolfGameGameModeBase.cpp">
+      <Filter>Source\GolfGame</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\GolfGame\GolfGameGameModeBase.h">
+      <Filter>Source\GolfGame</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\GolfGame\GolfPawn.h">
+      <Filter>Source\GolfGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GolfGame\MashButtonInput.h">
+      <Filter>Source\GolfGame</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\GolfGame\GolfPawn.cpp">
+      <Filter>Source\GolfGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GolfGame\MashButtonInput.cpp">
+      <Filter>Source\GolfGame</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
