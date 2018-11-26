@@ -36,7 +36,7 @@ protected:
 	class USphereComponent* BallCollision;
 	UPROPERTY(EditAnywhere, Category = "Components")
 	class UStaticMeshComponent* BallMesh;
-	UPROPERTY(EditAnywhere, Category = "Components")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 	class UMashButtonInput* MashInput;
 
 public:
