@@ -17,6 +17,13 @@ AGolfPawn::AGolfPawn()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Allow the player to hit the ball at start of game
+	bCanHitBall = true;
+
+	// Multiply impulse when hitting ball by 3
+	BallImpulseMult = 3.0F;
+
+
 	// Create ball collision sphere collision component
 	BallCollision = CreateDefaultSubobject<USphereComponent>(TEXT("BallCollision"));
 	BallCollision->SetSphereRadius(2.1335F);
@@ -44,7 +51,6 @@ AGolfPawn::AGolfPawn()
 
 	// Create mash button input
 	MashInput = CreateDefaultSubobject<UMashButtonInput>(TEXT("MashInput"));
-	//MashInput->SetupAttachment(BallCollision);
 
 }
 
@@ -92,6 +98,7 @@ void AGolfPawn::OnReleaseBallCharge()
 	{
 		bIsChargingHit = false;
 		PrintWithBool("Is Charging: ", bIsChargingHit);
+		BallCollision->AddImpulse(GetActorForwardVector() * BallImpulseMult);
 	}
 }
 

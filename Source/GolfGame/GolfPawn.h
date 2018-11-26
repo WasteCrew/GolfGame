@@ -41,7 +41,10 @@ protected:
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Golf")
-	bool bCanHitBall = true;
+	bool bCanHitBall;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Golf")
+	float BallImpulseMult;
 
 protected:
 	// Input variables and functions
