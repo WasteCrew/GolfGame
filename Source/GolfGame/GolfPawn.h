@@ -42,9 +42,14 @@ protected:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Golf")
 	bool bCanHitBall;
-
+	
+	// Minimum force to apply when hitting the ball
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Golf")
-	float BallImpulseMult;
+	float BallImpulseMin;
+	
+	// Maximum force to apply when hitting the ball
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Golf")
+	float BallImpulseMax;
 
 protected:
 	// Input variables and functions
