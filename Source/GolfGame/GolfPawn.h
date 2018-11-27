@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Curves/CurveFloat.h"
 #include "GolfPawn.generated.h"
 
 UCLASS()
@@ -29,33 +30,40 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Components")
-	class USpringArmComponent* BallCameraSpringArm;
-	UPROPERTY(EditAnywhere, Category = "Components")
-	class UCameraComponent* BallCamera;
-	UPROPERTY(EditAnywhere, Category = "Components")
 	class USphereComponent* BallCollision;
 	UPROPERTY(EditAnywhere, Category = "Components")
 	class UStaticMeshComponent* BallMesh;
+	UPROPERTY(EditAnywhere, Category = "Components")
+	class USpringArmComponent* BallCameraSpringArm;
+	UPROPERTY(EditAnywhere, Category = "Components")
+	class UCameraComponent* BallCamera;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 	class UMashButtonInput* MashInput;
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Golf")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Golf")
 	bool bCanHitBall;
-	
-	// Minimum force to apply when hitting the ball
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Golf")
-	float BallImpulseMin;
-	
-	// Maximum force to apply when hitting the ball
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Golf")
-	float BallImpulseMax;
+
+protected:
+
+	// Float Curve asset to use to determine impulse amount. Will interpolate between 0-1 on x-axis
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Golf")
+	UCurveFloat* ImpulseAmountCurve;
 
 protected:
 	// Input variables and functions
 
 	// Whether or not the player is currently charging their ball hit
 	bool bIsChargingHit;
+
+	// Current impulse amount to apply to ball hit from camera axis movement
+	UPROPERTY(BlueprintReadOnly, Category = "Golf")
+	float ImpulseInput;
+
+	// Multiplier for camera rotation
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Golf")
+	float CameraSpeedMultiplier;
 
 	// Bound to input events
 	void OnPressBallCharge();

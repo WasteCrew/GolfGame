@@ -6,10 +6,13 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
 #include "GolfGame/MashButtonInput.h"
+#include "UObject/ConstructorHelpers.h"
+
 
 #define Print(x) if(GEngine){GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, TEXT(x));};
 //#define PrintWithBool(x, var)if (GEngine) { GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT(x "%s"), var ? TEXT("True") : TEXT("False"))); }
 #define PrintWithBool(x, var)if (GEngine) { GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT(x "%s"), var ? TEXT("True") : TEXT("False"))); }
+#define PrintWithFloat(x, var) if(GEngine){GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, (FString(x) + FString::SanitizeFloat(var)));};
 
 // Sets default values
 AGolfPawn::AGolfPawn()
@@ -20,9 +23,11 @@ AGolfPawn::AGolfPawn()
 	// Allow the player to hit the ball at start of game
 	bCanHitBall = true;
 
-	// Range of ball hit impulses
-	BallImpulseMin = 3.0F;
-	BallImpulseMax = 15.0F;
+	CameraSpeedMultiplier = 20.0F;
+
+	// CurveFloat for determining impulse
+	auto ImpulseCurveAsset = ConstructorHelpers::FObjectFinder<UCurveFloat>(TEXT("CurveFloat'/Game/GolfGame/Core/Movement/FImpulseAmount_Default.FImpulseAmount_Default'"));
+	ImpulseAmountCurve = ImpulseCurveAsset.Object;
 
 	// Create ball collision sphere collision component
 	BallCollision = CreateDefaultSubobject<USphereComponent>(TEXT("BallCollision"));
@@ -39,7 +44,8 @@ AGolfPawn::AGolfPawn()
 	// Create camera spring arm component
 	BallCameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraSpringArm"));
 	BallCameraSpringArm->SetupAttachment(BallCollision);
-	BallCameraSpringArm->SetRelativeLocationAndRotation((FVector(0.0F, 0.0F, 20.0F)), FRotator(-20.0F, 0.0F, 0.0F));
+	//BallCameraSpringArm->SetRelativeRotation(FRotator(-20.0F, 0.0F, 0.0F));
+	BallCameraSpringArm->bUsePawnControlRotation = true;
 	BallCameraSpringArm->TargetArmLength = 100.0F;
 	BallCameraSpringArm->SocketOffset = FVector(0.0F, 0.0F, -20.0F);
 	BallCameraSpringArm->bEnableCameraLag = true;
@@ -81,13 +87,12 @@ void AGolfPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-
-
 void AGolfPawn::OnPressBallCharge()
 {
 	if (bCanHitBall)
 	{
 		bIsChargingHit = true;
+
 		PrintWithBool("Is Charging: ", bIsChargingHit);
 	}
 }
@@ -96,17 +101,29 @@ void AGolfPawn::OnReleaseBallCharge()
 {
 	if (bCanHitBall)
 	{
+
+		ImpulseInput = FMath::Clamp(ImpulseInput, 0.0F, 1.0F);
+		PrintWithFloat("Impulse Input, Clamped: ", ImpulseInput);
+
+		ImpulseInput = ImpulseAmountCurve->GetFloatValue(ImpulseInput);
+		PrintWithFloat("Impulse Input, Adjusted With Curve: ", ImpulseInput);
+
+		BallCollision->AddImpulse(BallCamera->GetForwardVector() * ImpulseInput);
+
+		// Reset values for next hit
 		bIsChargingHit = false;
+		ImpulseInput = 0.0F;
+
 		PrintWithBool("Is Charging: ", bIsChargingHit);
-		BallCollision->AddImpulse(GetActorForwardVector() * BallImpulseMult);
 	}
 }
 
 void AGolfPawn::OnCameraUp(float AxisValue)
 {
-	if (AxisValue != 0)
+	if (!bIsChargingHit && AxisValue != 0)
 	{
-		Print("Cam Change Up");
+		// Apply AxisValue to camera pitch
+		AddControllerPitchInput(AxisValue * GetWorld()->GetDeltaSeconds() * CameraSpeedMultiplier * -1.0F);
 	}
 }
 
@@ -114,7 +131,16 @@ void AGolfPawn::OnCameraRight(float AxisValue)
 {
 	if (AxisValue != 0)
 	{
-		Print("Cam Change Right");
+		if (bIsChargingHit)
+		{
+			// Apply AxisValue to HitChargeValue, adjusted for framerate
+			ImpulseInput += (AxisValue * GetWorld()->GetDeltaSeconds());
+		}
+		else
+		{
+			// Otherwise, apply AxisValue to camera yaw
+			AddControllerYawInput(AxisValue * GetWorld()->GetDeltaSeconds() * CameraSpeedMultiplier);
+		}
 	}
 }
 
