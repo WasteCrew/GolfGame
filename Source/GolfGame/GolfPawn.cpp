@@ -20,9 +20,9 @@ AGolfPawn::AGolfPawn()
 	// Allow the player to hit the ball at start of game
 	bCanHitBall = true;
 
-	// Multiply impulse when hitting ball by 3
-	BallImpulseMult = 3.0F;
-
+	// Range of ball hit impulses
+	BallImpulseMin = 3.0F;
+	BallImpulseMax = 15.0F;
 
 	// Create ball collision sphere collision component
 	BallCollision = CreateDefaultSubobject<USphereComponent>(TEXT("BallCollision"));
