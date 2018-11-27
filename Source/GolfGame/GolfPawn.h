@@ -29,13 +29,13 @@ public:
 
 
 protected:
-	UPROPERTY(EditAnywhere, Category = "Components")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 	class USphereComponent* BallCollision;
-	UPROPERTY(EditAnywhere, Category = "Components")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 	class UStaticMeshComponent* BallMesh;
-	UPROPERTY(EditAnywhere, Category = "Components")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 	class USpringArmComponent* BallCameraSpringArm;
-	UPROPERTY(EditAnywhere, Category = "Components")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 	class UCameraComponent* BallCamera;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")

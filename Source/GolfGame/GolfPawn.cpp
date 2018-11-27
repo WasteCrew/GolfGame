@@ -23,7 +23,7 @@ AGolfPawn::AGolfPawn()
 	// Allow the player to hit the ball at start of game
 	bCanHitBall = true;
 
-	CameraSpeedMultiplier = 20.0F;
+	CameraSpeedMultiplier = 40.0F;
 
 	// CurveFloat for determining impulse
 	auto ImpulseCurveAsset = ConstructorHelpers::FObjectFinder<UCurveFloat>(TEXT("CurveFloat'/Game/GolfGame/Core/Movement/FImpulseAmount_Default.FImpulseAmount_Default'"));
@@ -47,9 +47,9 @@ AGolfPawn::AGolfPawn()
 	//BallCameraSpringArm->SetRelativeRotation(FRotator(-20.0F, 0.0F, 0.0F));
 	BallCameraSpringArm->bUsePawnControlRotation = true;
 	BallCameraSpringArm->TargetArmLength = 100.0F;
-	BallCameraSpringArm->SocketOffset = FVector(0.0F, 0.0F, -20.0F);
+	BallCameraSpringArm->SocketOffset = FVector(0.0F, 0.0F, 40.0F);
 	BallCameraSpringArm->bEnableCameraLag = true;
-	BallCameraSpringArm->CameraLagSpeed = 3.0F;
+	BallCameraSpringArm->CameraLagSpeed = 10.0F;
 
 	// Create camera component
 	BallCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("BallCamera"));
@@ -108,7 +108,7 @@ void AGolfPawn::OnReleaseBallCharge()
 		ImpulseInput = ImpulseAmountCurve->GetFloatValue(ImpulseInput);
 		PrintWithFloat("Impulse Input, Adjusted With Curve: ", ImpulseInput);
 
-		BallCollision->AddImpulse(BallCamera->GetForwardVector() * ImpulseInput);
+		BallCollision->AddImpulse(BallCamera->GetForwardVector() * FVector(1.0F, 1.0F, 0.0F) * ImpulseInput);
 
 		// Reset values for next hit
 		bIsChargingHit = false;
